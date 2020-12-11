@@ -72,16 +72,16 @@ void initGsm()
 void setup()
 {
 	Serial.begin(9600);
-	gsm.begin(9600);
+	// gsm.begin(9600);
 
 	for (auto i = 0; i < sensorsCount; i++)
 		pinMode(sensorPins[i], INPUT);
 
 	moving = hasMoving();
 	
-	initGsm();
+	// initGsm();
 
-	sendSms(sendSmsPhone, "Start");
+	// sendSms(sendSmsPhone, "Start");
 }
 
 void detectMoving()
@@ -97,8 +97,8 @@ void detectMoving()
 
 	if (moving)
 	{
-		sendSms(sendSmsPhone, "Ograblenie!");
-		delay(10000);
+		// sendSms(sendSmsPhone, "Ograblenie!");
+		delay(100);
 	}
 }
 
@@ -106,5 +106,5 @@ void loop()
 {
 	detectMoving();
 
-	delay(100);
+	delay(10);
 }
