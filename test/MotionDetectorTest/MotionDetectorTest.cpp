@@ -77,7 +77,7 @@ void runTests()
 
 void setup()
 {
-	delay(2000);
+	delay(500);
 	UNITY_BEGIN();
 	runTests();
 	UNITY_END();

@@ -1,19 +1,21 @@
 #pragma once
 
+#define TINY_GSM_MODEM_SIM800
+#include <TinyGsmClient.h>
 #include <IGsmModule.h>
 #include <ITime.h>
 
 class GsmModule : public IGsmModule
 {
 public:
-    GsmModule(Stream *stream, ITime *time, unsigned long timeout = 10000);
+    GsmModule(Stream &stream, ITime *time, unsigned long timeout = 10000);
 	void begin();
-	void sendSms(const String &phone, const String &message);
+	bool sendSms(const String &phone, const String &message);
+	bool deleteSms(uint8_t id);
+	std::vector<Sms> readSms();
 private:
-	Stream *stream;
 	ITime *time;
 	unsigned long timeout;
 
-	String waitResponse();
-	String sendATCommand(const String &cmd, bool waiting);
+	TinyGsm gsm;
 };

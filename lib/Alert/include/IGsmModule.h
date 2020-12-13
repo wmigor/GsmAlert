@@ -1,12 +1,14 @@
 #pragma once
 
 #include <Arduino.h>
+#include <Sms.h>
+#include <vector>
 
 class IGsmModule
 {
 public:
 	virtual void begin() = 0;
-	virtual void sendSms(const String &phone, const String &message) = 0;
-private:
-
+	virtual bool sendSms(const String &phone, const String &message) = 0;
+	virtual bool deleteSms(uint8_t id) = 0;
+	virtual std::vector<Sms> readSms() = 0;
 };

@@ -1,55 +1,60 @@
 #include <GsmModule.h>
+#include <SmsParser.h>
 
-GsmModule::GsmModule(Stream *stream, ITime *time, unsigned long timeout)
+GsmModule::GsmModule(Stream &stream, ITime *time, unsigned long timeout) : gsm(stream)
 {
-	this->stream = stream;
 	this->time = time;
 	this->timeout = timeout;
 }
 
 void GsmModule::begin()
 {
-	sendATCommand("AT+CMGF=1;&W", true);
-	sendATCommand("AT+CSCS=\"GSM\"", true);
+	gsm.sendAT(GF("+CMGF=1"));
+	gsm.waitResponse();
+	gsm.sendAT(GF("+CSDH=1"));
+	gsm.waitResponse();
 }
 
-void GsmModule::sendSms(const String &phone, const String &message)
+bool GsmModule::sendSms(const String &phone, const String &message)
 {
-	sendATCommand("AT+CMGS=\"" + phone + "\"", true);
-	sendATCommand(message + "\r\n" + (String) ((char)26), true);
+	return gsm.sendSMS(phone, message);
 }
 
-String GsmModule::waitResponse()
+std::vector<Sms> GsmModule::readSms()
 {
-	String response = "";
-	auto expireTime = time->millis() + timeout;
+	std::vector<Sms> result;
+	SmsParser parser;
 
-	while (!stream->available() && time->millis() < expireTime)
-		time->delay(1);
-	
-	if (stream->available())
-		response = stream->readString();
-	else
-		Serial.println("Timeout...");
+	gsm.sendAT(GF("+CMGL=\"REC UNREAD\""));
 
-	return response;
-}
-
-String GsmModule::sendATCommand(const String &cmd, bool waiting)
-{
-	Serial.println(cmd);
-	stream->println(cmd);
-
-	if (waiting)
+	while (true)
 	{
-		auto response = waitResponse();
+		if (!gsm.waitResponse(5000L, GF(GSM_NL "+CMGL:"), GFP(GSM_OK), GFP(GSM_ERROR)))
+		{
+			Serial.println("noRead");
+			break;
+		}
 
-		if (response.startsWith(cmd))
-			response = response.substring(response.indexOf("\r", cmd.length()) + 2);
+		String data = gsm.stream.readStringUntil('\n');
+		data.trim();
+		if (data.length() == 0)
+			break;
 
-		Serial.println(response);
-		return response;
+		Serial.println("Data: " + data);
+		String message = gsm.stream.readStringUntil('\n');
+		message.trim();
+		Serial.println("Message: " + message);
+		
+		Sms sms;
+		if (parser.parse(data, message, sms))
+			result.push_back(sms);
 	}
 
-	return "";
+	return result;
+}
+
+bool GsmModule::deleteSms(uint8_t id)
+{
+	gsm.sendAT(GF("+CMGD="), id, GF(","), 0);
+	return gsm.waitResponse(5000L) == 1;
 }

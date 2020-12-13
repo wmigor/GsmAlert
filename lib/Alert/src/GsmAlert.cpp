@@ -32,5 +32,8 @@ void GsmAlert::detectMotion()
 	Serial.println(hasMotion ? "Alarm! Moving detected!!!!" : "No moving");
 
 	if (hasMotion)
+	{
 		gsmModule->sendSms(phone, "Ograblenie!");
+		delay(10000);
+	}
 }
