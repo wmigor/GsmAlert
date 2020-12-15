@@ -9,10 +9,14 @@ GsmModule::GsmModule(Stream &stream, ITime *time, unsigned long timeout) : gsm(s
 
 void GsmModule::begin()
 {
+	if (!gsm.begin())
+		Serial.println("Error init gsm");
 	gsm.sendAT(GF("+CMGF=1"));
-	gsm.waitResponse();
+	if (!gsm.waitResponse())
+		Serial.println("Error +CMGF=1");
 	gsm.sendAT(GF("+CSDH=1"));
-	gsm.waitResponse();
+	if (!gsm.waitResponse())
+		Serial.println("Error +CSDH=1");
 }
 
 bool GsmModule::sendSms(const String &phone, const String &message)
@@ -25,29 +29,23 @@ std::vector<Sms> GsmModule::readSms()
 	std::vector<Sms> result;
 	SmsParser parser;
 
-	gsm.sendAT(GF("+CMGL=\"REC UNREAD\""));
+	gsm.sendAT("+CMGL=\"REC UNREAD\"");
 
 	while (true)
 	{
-		if (!gsm.waitResponse(5000L, GF(GSM_NL "+CMGL:"), GFP(GSM_OK), GFP(GSM_ERROR)))
-		{
-			Serial.println("noRead");
+		if (!gsm.waitResponse(5000L, GF("+CMGL:")))
 			break;
-		}
 
-		String data = gsm.stream.readStringUntil('\n');
+		auto data = gsm.stream.readStringUntil('\n');
+		auto message = gsm.stream.readStringUntil('\n');
+		Serial.println(data);
+		Serial.println(message);
 		data.trim();
-		if (data.length() == 0)
-			break;
-
-		Serial.println("Data: " + data);
-		String message = gsm.stream.readStringUntil('\n');
 		message.trim();
-		Serial.println("Message: " + message);
-		
+		message.replace("\r", "");
 		Sms sms;
 		if (parser.parse(data, message, sms))
-			result.push_back(sms);
+			result.push_back(Sms(sms));
 	}
 
 	return result;

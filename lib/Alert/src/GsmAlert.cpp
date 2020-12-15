@@ -5,6 +5,7 @@ GsmAlert::GsmAlert(IMotionDetector *motionDetector, IGsmModule *gsmModule, const
     this->motionDetector = motionDetector;
     this->gsmModule = gsmModule;
 	this->phone = phone;
+	enabled = false;
 }
 
 void GsmAlert::begin()
@@ -20,6 +21,12 @@ void GsmAlert::update()
 	detectMotion();
 }
 
+void GsmAlert::setEnabled(bool value)
+{
+	enabled = value;
+	handleMotion();
+}
+
 void GsmAlert::detectMotion()
 {
 	auto value = motionDetector->hasMotion();
@@ -31,9 +38,15 @@ void GsmAlert::detectMotion()
 	
 	Serial.println(hasMotion ? "Alarm! Moving detected!!!!" : "No moving");
 
-	if (hasMotion)
-	{
-		gsmModule->sendSms(phone, "Ograblenie!");
-		delay(10000);
-	}
+	if (enabled && hasMotion)
+		handleMotion();
+}
+
+void GsmAlert::handleMotion()
+{
+	if (!enabled || !hasMotion)
+		return;
+
+	gsmModule->sendSms(phone, "Ograblenie!");
+	delay(10000);
 }
