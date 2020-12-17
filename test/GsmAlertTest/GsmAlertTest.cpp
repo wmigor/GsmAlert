@@ -95,6 +95,74 @@ void deleteSmsAfterRead()
 	TEST_ASSERT_EQUAL(11, gsm.deletedSms);
 }
 
+void onAlarmBySms()
+{
+	GsmAlert alert(detector, gsm, time, "+777");
+	alert.setReadSmsPeriod(1000);
+	Sms sms;
+	sms.id = 11;
+	sms.phone = "+777";
+	sms.message = "on";
+	gsm.smsList.push_back(sms);
+	alert.begin();
+	alert.setEnabled(false);
+	TEST_ASSERT_FALSE(alert.isEnabled());
+	time.delay(1000);
+	alert.update();
+	TEST_ASSERT_TRUE(alert.isEnabled());
+}
+
+void offAlarmBySms()
+{
+	GsmAlert alert(detector, gsm, time, "+777");
+	alert.setReadSmsPeriod(1000);
+	Sms sms;
+	sms.id = 11;
+	sms.phone = "+777";
+	sms.message = "off";
+	gsm.smsList.push_back(sms);
+	alert.begin();
+	alert.setEnabled(true);
+	TEST_ASSERT_TRUE(alert.isEnabled());
+	time.delay(1000);
+	alert.update();
+	TEST_ASSERT_FALSE(alert.isEnabled());
+}
+
+void onAlarmBySmsUnknownPhone()
+{
+	GsmAlert alert(detector, gsm, time, "+777");
+	alert.setReadSmsPeriod(1000);
+	Sms sms;
+	sms.id = 11;
+	sms.phone = "+13";
+	sms.message = "on";
+	gsm.smsList.push_back(sms);
+	alert.begin();
+	alert.setEnabled(false);
+	TEST_ASSERT_FALSE(alert.isEnabled());
+	time.delay(1000);
+	alert.update();
+	TEST_ASSERT_FALSE(alert.isEnabled());
+}
+
+void offAlarmBySmsUnknownPhone()
+{
+	GsmAlert alert(detector, gsm, time, "+777");
+	alert.setReadSmsPeriod(1000);
+	Sms sms;
+	sms.id = 11;
+	sms.phone = "+13";
+	sms.message = "off";
+	gsm.smsList.push_back(sms);
+	alert.begin();
+	alert.setEnabled(true);
+	TEST_ASSERT_TRUE(alert.isEnabled());
+	time.delay(1000);
+	alert.update();
+	TEST_ASSERT_TRUE(alert.isEnabled());
+}
+
 void runTests()
 {
     RUN_TEST(beginTest);
@@ -102,6 +170,10 @@ void runTests()
 	RUN_TEST(sendSmsDisabled);
 	RUN_TEST(readSms);
 	RUN_TEST(deleteSmsAfterRead);
+	RUN_TEST(onAlarmBySms);
+	RUN_TEST(offAlarmBySms);
+	RUN_TEST(onAlarmBySmsUnknownPhone);
+	RUN_TEST(offAlarmBySmsUnknownPhone);
 }
 
 

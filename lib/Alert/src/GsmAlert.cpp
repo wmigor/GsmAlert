@@ -32,17 +32,11 @@ void GsmAlert::update()
 		auto messages = gsmModule->readSms();
 		for (auto sms : messages)
 		{
-			if (sms.message.equalsIgnoreCase("info"))
-			{
-				String ansver = "Status: ";
-				ansver += isEnabled() ? "ON" : "OFF";
-				ansver += "\nCommands: info, on, off";
-				gsmModule->sendSms(sms.phone, ansver);
-			}
-			else if (sms.message.equalsIgnoreCase("on"))
-				setEnabled(true);
-			else if (sms.message.equalsIgnoreCase("off"))
-				setEnabled(false);
+			if (sms.phone == phone)
+				handleSms(sms);
+			else
+				Serial.println("Unknown phone! Skip it!");
+
 			gsmModule->deleteSms(sms.id);
 		}
 	}
@@ -76,4 +70,19 @@ void GsmAlert::handleMotion()
 
 	gsmModule->sendSms(phone, "Ograblenie!");
 	time->delay(10000);
+}
+
+void GsmAlert::handleSms(const Sms &sms)
+{
+	if (sms.message.equalsIgnoreCase("info"))
+	{
+		String ansver = "Status: ";
+		ansver += isEnabled() ? "ON" : "OFF";
+		ansver += "\nCommands: info, on, off";
+		gsmModule->sendSms(sms.phone, ansver);
+	}
+	else if (sms.message.equalsIgnoreCase("on"))
+		setEnabled(true);
+	else if (sms.message.equalsIgnoreCase("off"))
+		setEnabled(false);
 }

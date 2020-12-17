@@ -26,4 +26,5 @@ private:
 
 	void detectMotion();
 	void handleMotion();
+	void handleSms(const Sms &sms);
 };
