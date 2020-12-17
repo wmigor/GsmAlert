@@ -10,6 +10,7 @@ public:
 	inline bool sendSms(const String &phone, const String &message) { this->phone = phone; this->message = message; return true; }
 	inline bool deleteSms(uint8_t id)  { return true; }
 	inline std::vector<Sms> readSms() {return std::vector<Sms>(); }
+	inline String sendUssd(const String &ussd) { return ussd ;}
 public:
 	bool started;
 	String phone;

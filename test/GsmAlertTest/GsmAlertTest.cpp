@@ -22,22 +22,37 @@ void beginTest()
 	TEST_ASSERT_TRUE(gsm.started);
 }
 
-void beginMotion()
+void beginMotionEnabled()
 {
 	MotionDetectorFake detector;
 	GsmModuleFake gsm;
 	GsmAlert alert(&detector, &gsm, "+7");
     alert.begin();
+	alert.setEnabled(true);
 	detector.motion = true;
 	alert.update();
     TEST_ASSERT_TRUE(gsm.message != "");
 	TEST_ASSERT_TRUE(gsm.phone == "+7");
 }
 
+void beginMotionDisabled()
+{
+	MotionDetectorFake detector;
+	GsmModuleFake gsm;
+	GsmAlert alert(&detector, &gsm, "+7");
+    alert.begin();
+	alert.setEnabled(false);
+	detector.motion = true;
+	alert.update();
+    TEST_ASSERT_TRUE(gsm.message == "");
+	TEST_ASSERT_TRUE(gsm.phone == "");
+}
+
 void runTests()
 {
     RUN_TEST(beginTest);
-	RUN_TEST(beginMotion);
+	RUN_TEST(beginMotionEnabled);
+	RUN_TEST(beginMotionDisabled);
 }
 
 

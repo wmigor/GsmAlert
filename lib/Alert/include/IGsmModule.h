@@ -11,4 +11,5 @@ public:
 	virtual bool sendSms(const String &phone, const String &message) = 0;
 	virtual bool deleteSms(uint8_t id) = 0;
 	virtual std::vector<Sms> readSms() = 0;
+	virtual String sendUssd(const String &ussd) = 0;
 };

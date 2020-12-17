@@ -6,6 +6,7 @@ GsmAlert::GsmAlert(IMotionDetector *motionDetector, IGsmModule *gsmModule, const
     this->gsmModule = gsmModule;
 	this->phone = phone;
 	enabled = false;
+	hasMotion = false;
 }
 
 void GsmAlert::begin()

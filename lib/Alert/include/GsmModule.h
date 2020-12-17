@@ -13,6 +13,7 @@ public:
 	bool sendSms(const String &phone, const String &message);
 	bool deleteSms(uint8_t id);
 	std::vector<Sms> readSms();
+	inline String sendUssd(const String &ussd) { return gsm.sendUSSD(ussd); }
 private:
 	ITime *time;
 	unsigned long timeout;
