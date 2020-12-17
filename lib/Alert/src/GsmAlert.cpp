@@ -2,8 +2,8 @@
 
 GsmAlert::GsmAlert(IMotionDetector &motionDetector, IGsmModule &gsmModule, ITime &time, const String &phone)
 {
-    this->motionDetector = &motionDetector;
-    this->gsmModule = &gsmModule;
+	this->motionDetector = &motionDetector;
+	this->gsmModule = &gsmModule;
 	this->time = &time;
 	this->phone = phone;
 	enabled = false;
@@ -13,7 +13,7 @@ GsmAlert::GsmAlert(IMotionDetector &motionDetector, IGsmModule &gsmModule, ITime
 
 void GsmAlert::begin()
 {
-    motionDetector->begin();
+	motionDetector->begin();
 	gsmModule->begin();
 	lastSmsUpdate = time->millis();
 
@@ -53,10 +53,10 @@ void GsmAlert::detectMotion()
 	auto value = motionDetector->hasMotion();
 	auto changed = value != hasMotion;
 	hasMotion = value;
-	
+
 	if (!changed)
 		return;
-	
+
 	Serial.println(hasMotion ? "Alarm! Moving detected!!!!" : "No moving");
 
 	if (enabled && hasMotion)

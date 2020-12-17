@@ -8,15 +8,15 @@
 class GsmAlert
 {
 public:
-    GsmAlert(IMotionDetector &motionDetector, IGsmModule &gsmModule, ITime &time, const String &phone);
-    void begin();
-    void update();
+	GsmAlert(IMotionDetector &motionDetector, IGsmModule &gsmModule, ITime &time, const String &phone);
+	void begin();
+	void update();
 	inline bool isEnabled() const { return enabled; }
 	void setEnabled(bool value);
 	inline void setReadSmsPeriod(unsigned long value) { readSmsPeriod = value; }
 private:
-    IMotionDetector *motionDetector;
-    IGsmModule *gsmModule;
+	IMotionDetector *motionDetector;
+	IGsmModule *gsmModule;
 	ITime *time;
 	String phone;
 	bool hasMotion;

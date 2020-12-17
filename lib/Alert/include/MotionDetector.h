@@ -7,9 +7,9 @@
 class MotionDetector : public IMotionDetector
 {
 public:
-    MotionDetector(const std::vector<IPin *> &pins);
-    void begin();
-    bool hasMotion();
+	MotionDetector(const std::vector<IPin *> &pins);
+	void begin();
+	bool hasMotion();
 private:
-    std::vector<IPin *> pins;
+	std::vector<IPin *> pins;
 };

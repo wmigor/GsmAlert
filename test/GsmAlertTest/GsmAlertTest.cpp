@@ -23,30 +23,30 @@ void tearDown()
 void beginTest()
 {
 	GsmAlert alert(detector, gsm, time, "+7xxxxxxxxx");
-    alert.begin();
-    TEST_ASSERT_TRUE(detector.started);
+	alert.begin();
+	TEST_ASSERT_TRUE(detector.started);
 	TEST_ASSERT_TRUE(gsm.started);
 }
 
 void sendSmsEnabled()
 {
 	GsmAlert alert(detector, gsm, time, "+7");
-    alert.begin();
+	alert.begin();
 	alert.setEnabled(true);
 	detector.motion = true;
 	alert.update();
-    TEST_ASSERT_TRUE(gsm.message != "");
+	TEST_ASSERT_TRUE(gsm.message != "");
 	TEST_ASSERT_TRUE(gsm.phone == "+7");
 }
 
 void sendSmsDisabled()
 {
 	GsmAlert alert(detector, gsm, time, "+7");
-    alert.begin();
+	alert.begin();
 	alert.setEnabled(false);
 	detector.motion = true;
 	alert.update();
-    TEST_ASSERT_TRUE(gsm.message == "");
+	TEST_ASSERT_TRUE(gsm.message == "");
 	TEST_ASSERT_TRUE(gsm.phone == "");
 }
 
@@ -54,7 +54,7 @@ void readSms()
 {
 	GsmAlert alert(detector, gsm, time, "+7");
 	alert.setReadSmsPeriod(20000);
-    alert.begin();
+	alert.begin();
 	alert.update();
 	time.delay(19999);
 	alert.update();
@@ -78,7 +78,7 @@ void deleteSmsAfterRead()
 	Sms sms;
 	sms.id = 11;
 	gsm.smsList.push_back(sms);
-    alert.begin();
+	alert.begin();
 	alert.update();
 	time.delay(999);
 	alert.update();
@@ -165,7 +165,7 @@ void offAlarmBySmsUnknownPhone()
 
 void runTests()
 {
-    RUN_TEST(beginTest);
+	RUN_TEST(beginTest);
 	RUN_TEST(sendSmsEnabled);
 	RUN_TEST(sendSmsDisabled);
 	RUN_TEST(readSms);
@@ -179,12 +179,12 @@ void runTests()
 
 void setup()
 {
-    UNITY_BEGIN();
-    runTests();
-    UNITY_END();
+	UNITY_BEGIN();
+	runTests();
+	UNITY_END();
 }
 
 void loop()
 {
-    delay(500);
+	delay(500);
 }

@@ -54,10 +54,10 @@ void parseFailTest()
 
 void runTests()
 {
-	 RUN_TEST(parseSuccessTest);
-	 RUN_TEST(parseSuccessTest2);
-	 RUN_TEST(parseSuccessTest3);
-	 RUN_TEST(parseFailTest);
+	RUN_TEST(parseSuccessTest);
+	RUN_TEST(parseSuccessTest2);
+	RUN_TEST(parseSuccessTest3);
+	RUN_TEST(parseFailTest);
 }
 
 

@@ -7,7 +7,7 @@
 class GsmModule : public IGsmModule
 {
 public:
-    GsmModule(Stream &stream, unsigned long timeout = 10000);
+	GsmModule(Stream &stream, unsigned long timeout = 10000);
 	void begin();
 	bool sendSms(const String &phone, const String &message);
 	bool deleteSms(uint8_t id);

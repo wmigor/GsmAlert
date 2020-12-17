@@ -2,5 +2,5 @@
 
 Pin::Pin(uint8_t pin)
 {
-    this->pin = pin;
+	this->pin = pin;
 }

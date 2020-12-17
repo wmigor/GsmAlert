@@ -67,11 +67,11 @@ void hasMotion11()
 
 void runTests()
 {
-	 RUN_TEST(beginTest);
-	 RUN_TEST(hasMotion00);
-	 RUN_TEST(hasMotion01);
-	 RUN_TEST(hasMotion10);
-	 RUN_TEST(hasMotion11);
+	RUN_TEST(beginTest);
+	RUN_TEST(hasMotion00);
+	RUN_TEST(hasMotion01);
+	RUN_TEST(hasMotion10);
+	RUN_TEST(hasMotion11);
 }
 
 
