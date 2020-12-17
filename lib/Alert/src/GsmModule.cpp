@@ -1,9 +1,8 @@
 #include <GsmModule.h>
 #include <SmsParser.h>
 
-GsmModule::GsmModule(Stream &stream, ITime *time, unsigned long timeout) : gsm(stream)
+GsmModule::GsmModule(Stream &stream, unsigned long timeout) : gsm(stream)
 {
-	this->time = time;
 	this->timeout = timeout;
 }
 
@@ -55,4 +54,12 @@ bool GsmModule::deleteSms(uint8_t id)
 {
 	gsm.sendAT(GF("+CMGD="), id, GF(","), 0);
 	return gsm.waitResponse(5000L) == 1;
+}
+
+void GsmModule::update()
+{
+	while (Serial.available()) 
+		gsm.stream.write(Serial.read());
+	while(gsm.stream.available()) 
+		Serial.write(gsm.stream.read());
 }

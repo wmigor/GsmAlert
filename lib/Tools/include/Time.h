@@ -6,6 +6,6 @@
 class Time : public ITime
 {
 public:
-	inline unsigned long millis() { return ::millis(); }
+	inline unsigned long millis() const { return ::millis(); }
 	inline void delay(unsigned long time) { ::delay(time); }
 };

@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <unity.h>
-#include <PinFake.h>
+#include <Test/PinFake.h>
 #include <MotionDetector.h>
 
 void setUp()
@@ -77,7 +77,6 @@ void runTests()
 
 void setup()
 {
-	delay(500);
 	UNITY_BEGIN();
 	runTests();
 	UNITY_END();
